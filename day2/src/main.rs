@@ -1,25 +1,26 @@
 use core::panic;
 use std::{collections::HashMap, fs::File, io::{self, BufRead, BufReader, Lines}};
 
+struct Report {
+    levels: Vec<u8>
+}
 
 fn read_lines() -> io::Result<Lines<BufReader<File>>> {
     let file = File::open("input.txt")?;
     Ok(BufReader::new(file).lines())
 }
 
-fn parse_file(lines: Lines<BufReader<File>>) -> (Vec<usize>, Vec<usize>) {
-    let mut one = vec![0; 1000];
-    let mut two = vec![0; 1000];
+fn parse_file(lines: Lines<BufReader<File>>) -> Vec<Report> {
+    let reports = Vec::<Report>::new();
     for line in lines.flatten() {
-        let mut parts = line.split_whitespace();
-        let p1 = parts.next().unwrap();
-        let p2 = parts.next().unwrap();
-        let num1 = p1.parse::<usize>().unwrap();
-        let num2 = p2.parse::<usize>().unwrap();
-        one.push(num1);
-        two.push(num2);
+        let parts = line.split_whitespace();
+        let mut levels = Vec::<u8>::new();
+        for level in parts {
+            let num = level.parse::<u8>().unwrap();
+            levels.push(num);
+        }
     }
-    (one, two)
+    reports
 }
 
 fn calculate_difference(one: &Vec<usize>, two: &Vec<usize>) -> usize {
@@ -59,14 +60,20 @@ fn calculate_similarity_score(one: &Vec<usize>, two: &Vec<usize>) -> usize {
     score
 }
 
+fn count_safe_reports(reports: &Vec<Report>) -> usize {
+    0
+}
+
+fn count_safe_with_dampener(reports: &Vec<Report>) -> usize {
+    0
+}
+
 fn main() {
     if let Ok(lines) = read_lines() {
-        let (mut one, mut two) = parse_file(lines);
-        one.sort();
-        two.sort();
-        let result = calculate_difference(&one, &two);
-        println!("The difference is {}", result);
-        let similarity = calculate_similarity_score(&one, &two);
-        println!("The similarity score is {}", similarity);
+        let mut reports = parse_file(lines);
+        let num_safe_reports = count_safe_reports(&reports);
+        println!("Number of safe reports: {}", num_safe_reports);
+        let num_safe_with_dampener = count_safe_with_dampener(&reports);
+        println!("Number of safe reports with problem dampener: {}", num_safe_with_dampener);
     }
 }
